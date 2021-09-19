@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--begin of menu-->
+<th:block th:fragment="menu">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="home">Loc's store</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarsExampleDefault">
+                <ul class="navbar-nav m-auto">
+                    <li class="nav-item" th:if="${sessionScope.acc != null}">
+                        <a class="nav-link" href="/info">Hello ${sessionScope.acc.name}</a>
+                    </li>
+                    <li class="nav-item" th:if="${sessionScope.acc.isUser==1}">
+                        <a class="nav-link" href="/account">Manager Account</a>
+                    </li>
+                    <th:block th:if="${sessionScope.acc.isAdmin==1}">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/account">Manager Account</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin?action=show">Manager Product</a>
+                        </li>
+                    </th:block>
+                    <li class="nav-item" th:if="${sessionScope.acc != null}">
+                        <a class="nav-link" method="POST" href="/loginControl">Log-out</a>
+                    </li>
+                    <li class="nav-item" th:if="${sessionScope.acc == null}">
+                        <a class="nav-link" href="views/Login.jsp">Log-in</a>
+                    </li>
+                </ul>
+
+                <form action="/search" method="post" class="form-inline my-2 my-lg-0">
+                    <div class="input-group input-group-sm">
+                        <input name="txt" value="${txtS}" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="Search by name:">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-secondary btn-number">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <%--                <c:if test="${sessionScope.acc!=null}">--%>
+                    <%--                    <a class="btn btn-success btn-sm ml-3" href="/sale?action=${sessionScope.acc.isAdmin==0?"show":"showAdmin"}">--%>
+                    <%--                        <i class="fa fa-shopping-cart"></i> Cart--%>
+                    <%--                        <span class="badge badge-light">${cardList.size()}</span>--%>
+                    <%--                    </a>--%>
+                    <%--                </c:if>--%>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">Chào mừng đến với Loc's store</h1>
+            <p class="lead text-muted mb-0">Giúp khách hàng tuyệt vời hơn dưới mọi ánh nhìn</p>
+        </div>
+    </section>
+</th:block>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="home">Loc's store</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarsExampleDefault">
+            <ul class="navbar-nav m-auto">
+                    <li class="nav-item" th:if="${sessionScope.acc != null}">
+                        <a class="nav-link" href="/info">Hello ${sessionScope.acc.name}</a>
+                    </li>
+                    <li class="nav-item" th:if="${sessionScope.acc.isUser==1}">
+                        <a class="nav-link" href="/account">Manager Account</a>
+                    </li>
+                    <li class="nav-item" th:if="${sessionScope.acc.isAdmin==1}">
+                        <a class="nav-link" href="/account">Manager Account</a>
+                    </li>
+                    <li class="nav-item" th:if="${sessionScope.acc.isAdmin==1}">
+                        <a class="nav-link" href="/admin?action=show">Manager Product</a>
+                    </li>
+                    <li class="nav-item" th:if="${sessionScope.acc != null}">
+                        <a class="nav-link" method="POST" href="/loginControl">Log-out</a>
+                    </li>
+                    <li class="nav-item" th:if="${sessionScope.acc == null}">
+                        <a class="nav-link" href="views/Login.jsp">Log-in</a>
+                    </li>
+            </ul>
+
+            <form action="/search" method="post" class="form-inline my-2 my-lg-0">
+                <div class="input-group input-group-sm">
+                    <input name="txt" value="${txtS}" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="Search by name:">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-secondary btn-number">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+<%--                <c:if test="${sessionScope.acc!=null}">--%>
+<%--                    <a class="btn btn-success btn-sm ml-3" href="/sale?action=${sessionScope.acc.isAdmin==0?"show":"showAdmin"}">--%>
+<%--                        <i class="fa fa-shopping-cart"></i> Cart--%>
+<%--                        <span class="badge badge-light">${cardList.size()}</span>--%>
+<%--                    </a>--%>
+<%--                </c:if>--%>
+            </form>
+        </div>
+    </div>
+</nav>
+<section class="jumbotron text-center">
+    <div class="container">
+        <h1 class="jumbotron-heading">Chào mừng đến với Loc's store</h1>
+        <p class="lead text-muted mb-0">Giúp khách hàng tuyệt vời hơn dưới mọi ánh nhìn</p>
+    </div>
+</section>
+<!--end of menu-->

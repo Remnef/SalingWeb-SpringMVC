@@ -1,0 +1,45 @@
+body{
+    height: 100vh;
+    background: #95a5a6;
+}
+.section-register{
+    min-height: 700px;
+}
+.form-background{
+    background: white;
+    margin-top:100px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    border-radius: 10px ;
+}
+.form-background > h3{
+    text-align: center;
+    font-size: 30px;
+}
+.form-item{
+    margin-bottom: 10px;
+}
+.pw{
+    text-align: right;
+}
+.btn-login{
+    padding: 12px 38px;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background-color: #e17055;
+    color: white;
+    border: none;
+    display: table;
+    cursor:pointer;
+    margin: 15px auto 30px;
+    border-radius: 10px ;
+}
+
+.user-register{
+    text-align: center;
+}
+.avatar_upload{
+    margin-top: 10px;
+
+}

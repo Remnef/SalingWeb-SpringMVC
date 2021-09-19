@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Loc's store</title>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+<!--    <div id="message" class="${mess=="Successful !"?"alert alert-success":(mess==null)?"":"alert alert-danger"}" role="alert">-->
+<!--        <p style="text-align: center; font-size: larger">${mess}</p>-->
+<!--    </div>-->
+        <th:block th:replace="/layout/Menu :: menu"></th:block>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+                                <li class="breadcrumb-item"><a th:href="@{/home}">Category</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <th:block th:replace="/layout/Left :: left"></th:block>
+
+                    <div class="col-sm-9">
+                        <div class="row">
+                        <th:block th:each="sneaker : ${sneakers}">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <img class="card-img-top" th:src="@{${sneaker.image}}" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h4 class="card-title show_txt"><a th:href="@{/detail/__${sneaker.id}__}" title="View Product" th:text="${o.name}"></a></h4>
+                                        <p class="card-text show_txt" th:text="${sneaker.title}"></p>
+                                        <div class="row">
+                                            <div class="col">
+                                                <p class="btn btn-danger btn-block" th:text="${sneaker.price}">$</p>
+                                            </div>
+<!--                                            <div class="col">-->
+<!--                                                <th:block th:if="${sessionScope.acc && sessionScope.acc.isAdmin == true}">-->
+<!--                                                    <a data-id="${o.id}" data-toggle="modal" class="btn btn-success btn-block addCard">Add to cart</a>-->
+<!--                                                </th:block>-->
+<!--                                            </div>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    <th:block th:replace="/layout/Footer :: footer"></th:block>
+        <%--Modal--%>
+        <div id="addCard" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action ="/sale" method="post">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Card ?</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <input class="inputPass" type="number" name="quantity" placeholder="Quantity" required>
+                        </div>
+                        <input type="text" id="idP" name="id" style="display: none">
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="submit" name="submit" class="btn btn-danger" value="addCard">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        $(".addCard").click(function () {
+            let ids = $(this).attr('data-id');
+            $("#idP").val( ids );
+            $('#addCard').modal('show');
+        });
+        $(".alert").fadeTo(2000, 500).fadeOut(1000);
+    </script>
+</html>
+
