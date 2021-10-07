@@ -1,35 +1,50 @@
 package com.cg.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "account")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String username;
 
+    @Column(name = "pass")
+    @NotBlank
     private String password;
 
+    @JsonProperty
     private boolean isUser;
 
-    private boolean isAdmin;
+    private boolean isAdmin = false;
 
     private String name;
 
+    @NotBlank
     private String email;
 
-    private boolean status;
+    private boolean status = true;
+
+    public Account(String username, String password, boolean isUser, String name, String email) {
+        this.username = username;
+        this.password = password;
+        this.isUser = isUser;
+        this.name = name;
+        this.email = email;
+    }
+
 
 }

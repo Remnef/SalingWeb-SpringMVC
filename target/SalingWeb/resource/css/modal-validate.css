@@ -1,0 +1,22 @@
+.modal-alert-danger {
+    background-color: #ff2020;
+    color: #fff;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.modal-alert-danger label {
+    margin: 10px;
+}
+
+.show {
+    display: block !important;
+}
+
+.hide {
+    display: none;
+}
+
+.error {
+    border: solid 1px red !important;
+}

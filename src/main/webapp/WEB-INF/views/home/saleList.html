@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Loc's store</title>
+    <th:block th:replace="/layout/Menu :: head"></th:block>
+    <link href="/resource/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="/resource/css/manager.css" rel="stylesheet" type="text/css"/>
+    <style>
+        img {
+            width: 200px;
+            height: 120px;
+        }
+    </style>
+<body>
+<th:block th:replace="/layout/Menu :: menu"></th:block>
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2>Sale history</h2>
+                </div>
+            </div>
+        </div>
+        <table class="text-center table table-striped table-hover" id="tblListProducts">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Bill</th>
+                <th>Time</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="cart : ${cartList}">
+                <tr>
+                    <td th:text="${cart.getId()}"></td>
+                    <td th:text="${cart.getName()}"></td>
+                    <td th:text="${cart.getPrice()}+' $'"></td>
+                    <td th:text="${cart.getQuantity()}"></td>
+                    <td th:text="${cart.getAmount()} +' $'"></td>
+                    <td th:text="${cart.getTime()}"></td>
+                    <td th:text="${cart.status?'Đang trong giỏ hàng':'Đang giao hàng'}"></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <div class="clearfix">
+            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+            <ul class="pagination">
+                <li class="page-item disabled"><a href="#">Previous</a></li>
+                <li class="page-item"><a href="#" class="page-link">1</a></li>
+                <li class="page-item"><a href="#" class="page-link">2</a></li>
+                <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                <li class="page-item"><a href="#" class="page-link">4</a></li>
+                <li class="page-item"><a href="#" class="page-link">5</a></li>
+                <li class="page-item"><a href="#" class="page-link">Next</a></li>
+            </ul>
+        </div>
+    </div>
+    <a href="/home">
+        <button type="button" class="btn btn-primary">Back to home</button>
+    </a>
+</div>
+</body>
+</html>

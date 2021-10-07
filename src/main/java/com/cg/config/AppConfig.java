@@ -2,6 +2,8 @@ package com.cg.config;
 
 import com.cg.service.Account.AccountService;
 import com.cg.service.Account.IAccountService;
+import com.cg.service.Cart.CartService;
+import com.cg.service.Cart.ICartService;
 import com.cg.service.Category.CategoryService;
 import com.cg.service.Category.ICategoryService;
 import com.cg.service.Sneaker.ISneakerService;
@@ -48,21 +50,30 @@ import java.util.Properties;
 @EnableJpaRepositories("com.cg.repository")
 @ComponentScan("com.cg")
 @PropertySource("classpath:database.properties")
-public class AppConfig implements WebMvcConfigurer, ApplicationContextAware{
+public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     @Autowired
     private Environment environment;
 
     private ApplicationContext applicationContext;
 
     @Bean
-    public ISneakerService sneakerService(){return new SneakerService();}
-
-    @Bean
-    public ICategoryService categoryService(){return new CategoryService();
+    public ISneakerService sneakerService() {
+        return new SneakerService();
     }
 
     @Bean
-    public IAccountService accountService(){return new AccountService();
+    public ICategoryService categoryService() {
+        return new CategoryService();
+    }
+
+    @Bean
+    public IAccountService accountService() {
+        return new AccountService();
+    }
+
+    @Bean
+    public ICartService cartService() {
+        return new CartService();
     }
 
     @Override
