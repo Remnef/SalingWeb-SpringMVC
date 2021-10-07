@@ -253,18 +253,8 @@
         </div>
     </div>
 </div>
-<!--    <script src="js/manager.js" type="text/javascript"></script>-->
 </body>
 <script>
-    // $(".delete").click(function () {
-    //     let ids = $(this).attr('data-id');
-    //     $("#id").val( ids );
-    //     $('#deleteEmployeeModal').modal('show');
-    // });
-    //
-
-    // $(".alert").fadeTo(2000, 500).fadeOut(1000);
-
     class Sneaker {
         constructor(id, name, price, image, title, description, category) {
             this.id = id;
@@ -297,7 +287,6 @@
     $("#tblListProducts").on("click", ".edit", function () {
         $("#currentRow").val($(this).attr('data-id'));
         let id = $("#currentRow").val();
-        console.log(id);
         $.ajax({
             type: "get",
             headers: {
@@ -364,7 +353,6 @@
                 $("#addEmployeeModal").modal("hide");
                 App.showAlert("success", "Successfull !");
             }).fail((jqXHR) => {
-                console.log(jqXHR);
                 let str = '';
 
                 if (jqXHR.responseJSON) {
@@ -497,7 +485,6 @@
                 $("#editEmployeeModal").modal("hide");
                 App.showAlert("success", "Successfull !");
             }).fail((jqXHR) => {
-                console.log(jqXHR);
                 let str = '';
 
                 if (jqXHR.responseJSON) {
@@ -603,7 +590,6 @@
                 $("#deleteEmployeeModal").modal("hide");
                 App.showAlert("success", "Successfull !");
             }).fail((jqXHR) => {
-                console.log(jqXHR);
                 $("#deleteEmployeeModal").modal("hide");
                 App.showAlert("danger", "Something is Wrong")
             });

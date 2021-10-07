@@ -16,9 +16,6 @@
     </style>
 <body>
 <th:block th:replace="/layout/Menu :: menu"></th:block>
-<!--<div id="message" th:class="${mess=="Successful !"?"alert alert-success":(mess==null)?"":"alert alert-danger"}" role="alert">-->
-<!--    <p style="text-align: center; font-size: larger">${mess}</p>-->
-<!--</div>-->
 <div class="container">
     <div class="table-wrapper">
         <div class="table-title">
@@ -50,7 +47,6 @@
                     <td th:style="${account.status?'':'color: #95a5a6'}" th:text="${account.username}"></td>
                     <td th:style="${account.status?'':'color: #95a5a6'}" th:text="${account.name}"></td>
                     <td th:style="${account.status?'':'color: #95a5a6'}" th:text="${account.email}"></td>
-                    <!--                    <td th:style="${account.status==1?'':'color: #95a5a6'}" th:text="${acount.isAdmin?'Admin':{account.isUser}?'Mod':'User'}${o.status==1?"":"-locked"}"></td>-->
                     <td style="color: #95a5a6" th:unless="${account.status}">Locked</td>
                     <th:block th:if="${account.status}">
                         <td th:if="${account.isAdmin()}">Admin</td>
@@ -230,16 +226,6 @@
 
 </body>
 <script>
-    $("#tblListProducts").on("click", ".delete", function () {
-        let id = $(this).data('id');
-        $("#id").val(id);
-        $('#setLock').modal('show');
-    });
-    $("#tblListProducts").on("click", ".setMod", function () {
-        let ids = $(this).data('id');
-        $("#idAcc").val(ids);
-        $('#setModEmployeeModal').modal('show');
-    });
 
     class Account {
         constructor(username, password, isUser, name, email) {
@@ -250,6 +236,21 @@
             this.email = email;
         }
     }
+
+    //onclick setLock
+    $("#tblListProducts").on("click", ".delete", function () {
+        let id = $(this).data('id');
+        $("#id").val(id);
+        $('#setLock').modal('show');
+    });
+
+    //onclick setMod
+    $("#tblListProducts").on("click", ".setMod", function () {
+        let ids = $(this).data('id');
+        $("#idAcc").val(ids);
+        $('#setModEmployeeModal').modal('show');
+    });
+
 
     $(document).ready(function () {
         // ajax create
@@ -293,7 +294,6 @@
                 $("#addEmployeeModal").modal("hide");
                 App.showAlert("success", "Successfull !");
             }).fail((jqXHR) => {
-                console.log(jqXHR);
                 let str = '';
 
                 if (jqXHR.responseJSON) {
@@ -391,9 +391,6 @@
         function setLock() {
             let id = $("#id").val();
             let account = new Account();
-
-            console.log(sessionAccount)
-
             $.ajax({
                 type: "POST",
                 headers: {
@@ -404,7 +401,6 @@
                 data: JSON.stringify(account)
             }).done((data) => {
                 account = data
-                console.log(sessionAccount);
                 let strAdmod = `
                     <a data-id="${account.id}" class="delete" data-toggle="modal"
                         style="${account.status ? '' : 'color: #95a5a6'}">
@@ -502,15 +498,6 @@
     $("#btnCreate").on("click", function () {
         $("#frmCreateEmployee").submit();
     });
-
-    // let sessionAccount = null;
-    //
-    // window.onload = function() {
-    //     sessionAccount = [[${accountObj}]];
-    //     console.log(sessionAccount)
-    // }
-
-
 </script>
 
 

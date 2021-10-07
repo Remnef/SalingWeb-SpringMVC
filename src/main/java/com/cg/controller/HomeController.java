@@ -1,14 +1,10 @@
 package com.cg.controller;
 
 import com.cg.model.Account;
-import com.cg.model.Cart;
-import com.cg.model.Sneaker;
-import com.cg.model.dto.CartDTO;
 import com.cg.service.Account.IAccountService;
 import com.cg.service.Cart.ICartService;
 import com.cg.service.Category.ICategoryService;
 import com.cg.service.Sneaker.ISneakerService;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,8 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RequestMapping("/home")
