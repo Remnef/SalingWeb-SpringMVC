@@ -7,9 +7,6 @@
     <link href="/resource/css/style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-<!--    <div id="message" th:class="${ mess=='Successful !'?'alert alert-success':'alert alert-danger'}" role="alert">-->
-<!--        <p style="text-align: center; font-size: larger">${mess}</p>-->
-<!--    </div>-->
 <th:block th:replace="/layout/Menu :: menu"></th:block>
 <div class="container">
     <div class="row">
@@ -41,11 +38,6 @@
                                     <div class="col">
                                         <p class="btn btn-danger btn-block" th:text="${sneaker.price}"></p>
                                     </div>
-                                    <!--                                            <div class="col">-->
-                                    <!--                                                <th:block th:if="${sessionScope.acc && sessionScope.acc.isAdmin == true}">-->
-                                    <!--                                                    <a data-id="${o.id}" data-toggle="modal" class="btn btn-success btn-block addCard">Add to cart</a>-->
-                                    <!--                                                </th:block>-->
-                                    <!--                                            </div>-->
                                 </div>
                             </div>
                         </div>
@@ -58,53 +50,6 @@
 </div>
 
 <th:block th:replace="/layout/Footer :: footer"></th:block>
-<!--        <%&#45;&#45;Modal&#45;&#45;%>-->
-<div id="addCard" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form method="post">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Card ?</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <input class="inputPass" type="number" name="quantity" placeholder="Quantity" required>
-                </div>
-                <input type="text" id="idP" name="id" style="display: none">
-                <div class="modal-footer">
-                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                    <input type="submit" id="addCardSubmit" name="submit" class="btn btn-danger" value="addCard">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 </body>
-
-<script>
-    class Sneaker {
-        constructor(id, name, title, price, image) {
-            this.id = id;
-            this.name = name;
-            this.title = title;
-            this.price = price;
-            this.image = image;
-        }
-    }
-
-    class Category {
-        constructor(id, name) {
-            this.id = id;
-            this.name = name;
-        }
-    }
-
-    $(".addCard").click(function () {
-        let ids = $(this).attr('data-id');
-        $("#idP").val(ids);
-        $('#addCard').modal('show');
-    });
-    $(".alert").fadeTo(2000, 500).fadeOut(1000);
-</script>
 </html>
 
