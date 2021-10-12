@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>JSP Page</title>
+    <th:block th:replace="/layout/Menu :: head"></th:block>
+    <link href="/resource/css/style.css" rel="stylesheet" type="text/css"/>
+    <style>
+        .gallery-wrap .img-big-wrap img {
+            height: 450px;
+            width: auto;
+            display: inline-block;
+            cursor: zoom-in;
+        }
+
+        .gallery-wrap .img-small-wrap .item-gallery {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #ddd;
+            margin: 7px 2px;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .inputPass {
+            width: 80%;
+            padding: 5px;
+            margin: 7px 7px 7px 50px;
+            border-radius: 15px;
+            border-collapse: collapse;
+
+        }
+
+        .gallery-wrap .img-small-wrap {
+            text-align: center;
+        }
+
+        .gallery-wrap .img-small-wrap img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: zoom-in;
+        }
+
+        .img-big-wrap img {
+            width: 100% !important;
+            height: auto !important;
+        }
+    </style>
+</head>
+<body>
+<th:block th:replace="/layout/Menu :: menu"></th:block>
+<div class="container">
+    <div class="row">
+        <th:block th:replace="/layout/Left :: left"></th:block>
+        <div class="col-sm-9">
+            <div class="container">
+                <div class="card">
+                    <div class="row">
+                        <aside class="col-sm-5 border-right">
+                            <article class="gallery-wrap">
+                                <div class="img-big-wrap">
+                                    <div><a href="#">
+<!--                                        <img src="https://scr.vn/wp-content/uploads/2020/07/avt-con-trai-ng%E1%BA%A7u-978x1024.jpg">-->
+                                        <img th:src="@{/image/icon.png}" alt="default avatar"/>
+                                    </a>
+                                    </div>
+                                </div> <!-- slider-product.// -->
+                                <div class="img-small-wrap">
+                                </div> <!-- slider-nav.// -->
+                            </article> <!-- gallery-wrap .end// -->
+                        </aside>
+                        <aside class="col-sm-7">
+                            <article class="card-body p-5">
+                                <b style="font-size: 20px">Name: <span th:text="${account.getName()}"></span></b>
+                                <p><b>IdUser: </b> <span th:text="${account.getId()}"></span></p>
+                                <p><b>Username: </b><span th:text="${account.username}"></span></p>
+                                <p><b>Email: </b> <span th:text="${account.email}"></span></p>
+                                <p th:if="${account.isAdmin()}"><b>Access permissions: </b>Admin</p>
+                                <p th:if="${account.isUser() && account.isAdmin()==false}"><b>Access permissions: </b>Mod
+                                </p>
+                                <p th:unless="${account.isUser()}"><b>Access permissions: </b>User</p>
+                                <a th:data-id="${account.id}" data-toggle="modal"
+                                   class="btn btn-lg btn-success text-uppercase changePass"> Edit Password </a>
+                            </article> <!-- card-body.// -->
+                        </aside> <!-- col.// -->
+                    </div> <!-- row.// -->
+                </div> <!-- card.// -->
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal-->
+<div id="passEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="frmPass">
+                <div class="modal-header">
+                    <h4 class="modal-title">Change Password</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-alert-danger">
+
+                </div>
+                <div class="modal-body">
+                    <input class="inputPass" type="password" name="password" id="password" placeholder="Password:">
+                    <input class="inputPass" type="password" name="newPassword" id="newPassword"
+                           placeholder=" New Password:">
+                    <input class="inputPass" type="password" name="retype" id="retype" placeholder="Retype:">
+                </div>
+            </form>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                <input type="button" id="btnChange" class="btn btn-danger" value="changePass">
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="/layout/Footer :: footer"></th:block>
+</body>
+<script>
+    let domain = location.origin;
+
+    // show frm
+    $(".changePass").click(function () {
+        let ids = $(this).attr('data-id');
+        $("#idAcc").val(ids);
+        $('#passEmployeeModal').modal('show');
+    });
+
+    //ajax change Password
+    function changePass() {
+        let passwordDTO = {
+            "password": $("#password").val(),
+            "newPassword": $("#newPassword").val(),
+            "retype": $("#retype").val()
+        }
+        $.ajax({
+            type: "Post",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: domain+"/api/account/password/"
+            , data: JSON.stringify(passwordDTO)
+
+        }).done((data) => {
+            App.showAlert("success", "Successfull !");
+            $('#passEmployeeModal').modal('show');
+        }).fail((jqXHR) => {
+            let str = '';
+            if (jqXHR.responseJSON) {
+                if (jqXHR.responseJSON.message) {
+                    str += `<label class="error">${jqXHR.responseJSON.message}</label>`;
+                } else {
+                    $.each(jqXHR.responseJSON, function (key, value) {
+                        str += `<label id="${key}-error" class="error" for="${key}">${key + ": " + value}</label>`;
+                        $("#" + key).addClass("error");
+                    });
+                }
+            }
+            $("#passEmployeeModal .modal-alert-danger").removeClass("hide").addClass("show");
+            $("#passEmployeeModal .modal-alert-danger").append(str);
+        });
+
+        $("#passEmployeeModal").on("hidden.bs.modal", function () {
+            $("#frmPass")[0].reset();
+            $("#frmPass").validate().resetForm();
+        });
+    }
+
+    //validate
+    $("#passEmployeeModal").validate({
+        onkeyup: function (element) {
+            $(element).valid()
+        },
+        onclick: false,
+        onfocusout: false,
+        rules: {
+            password: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            }, newPassword: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            }, retype: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            }
+        },
+        errorLabelContainer: "#addEmployeeModal .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#addEmployeeModal .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#passEmployeeModal .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#passEmployeeModal .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#frmPass input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        messages: {},
+        submitHandler: function () {
+            changePass();
+        }
+    });
+    //onclick validate
+    $("#btnChange").on("click", function () {
+        $("#passEmployeeModal").submit();
+    })
+</script>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Loc's store</title>
+    <th:block th:replace="/layout/Menu :: head"></th:block>
+</head>
+<body>
+<input type="text" style="display:none;" th:value="${session.account.id}" id="currentRow">
+<th:block th:replace="/layout/Menu :: menu"></th:block>
+<div class="shopping-cart">
+    <div class="px-4 px-lg-0">
+        <div class="pb-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
+
+                        <!-- Shopping cart table -->
+                        <div class="table-responsive">
+                            <table id="tableSale" class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="p-2 px-3 text-uppercase">Sản Phẩm</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="py-2 text-uppercase">Đơn Giá</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="py-2 text-uppercase">Số Lượng</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="py-2 text-uppercase">Thành tiền</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="py-2 text-uppercase">Xóa</div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <th:block th:each="card : ${cartList}">
+                                    <tr th:id="'cart_'+${card.id}">
+                                        <th scope="row">
+                                            <div class="p-2">
+                                                <img th:src="${card.getImage()}" width="70"
+                                                     class="img-fluid rounded shadow-sm">
+                                                <div class="ml-3 d-inline-block align-middle">
+                                                    <h5 class="mb-0"><a href="#" class="text-dark d-inline-block"
+                                                                        th:text="${card.getName()}"></a></h5><span
+                                                        class="text-muted font-weight-normal font-italic"></span>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <td class="align-middle"><strong th:text="${card.getPrice()}"></strong></td>
+                                        <td class="align-middle">
+                                            <!--                                                        <a href="#"><button class="btnSub">-</button></a> -->
+                                            <strong th:text="${card.getQuantity()}"></strong>
+                                            <!--                                                        <a href="#"><button class="btnAdd">+</button></a>-->
+                                        </td>
+                                        <td class="align-middle">
+                                            <strong th:text="${card.getAmount()}"></strong>
+                                        </td>
+                                        <td class="align-middle">
+                                            <a class="btn btn-danger delete" th:data-id="${card.getId()}"
+                                               data-toggle="modal">
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i><span>Delete</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- End -->
+                    </div>
+                </div>
+                <form id="saleFrm">
+                    <div class="row py-5 p-4 bg-white rounded shadow-sm">
+                        <div class="col-lg-6">
+                            <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Address</div>
+                            <div class="p-4">
+                                <div class="input-group mb-4 border rounded-pill p-2">
+                                    <input type="text" placeholder="Địa chỉ" aria-describedby="button-addon3"
+                                           id="addressInput" name="address" class="form-control border-0">
+                                    <div class="input-group-append border-0">
+                                        <i class="fa fa-map-marker"></i>
+                                    </div>
+                                </div>
+                                <div class="modal-alert-danger"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Thành tiền
+                            </div>
+                            <div class="p-4">
+                                <ul class="list-unstyled mb-4">
+                                    <li class="d-flex justify-content-between py-3 border-bottom"><strong
+                                            class="text-muted">Tổng tiền hàng</strong><strong th:text="${allAmount}">
+                                        $</strong></li>
+                                    <li class="d-flex justify-content-between py-3 border-bottom"><strong
+                                            class="text-muted">Phí vận chuyển</strong><strong>Free ship</strong></li>
+                                    <li class="d-flex justify-content-between py-3 border-bottom"><strong
+                                            class="text-muted">VAT</strong><strong th:text="${vat}"></strong></li>
+                                    <li class="d-flex justify-content-between py-3 border-bottom"><strong
+                                            class="text-muted">Tổng thanh toán</strong>
+                                        <h5 class="font-weight-bold" th:text="${getBill}"> $</h5>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <th:block class="row" th:if="${cartList.size()}">
+                        <button class="btn btn-success" id="btnSale">
+                            <i class="fa fa-shopping-cart"></i> <span>Mua</span>
+                        </button>
+                    </th:block>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal HTML -->
+<div id="deleteEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="deleteFrm">
+                <div class="modal-alert-danger">
+
+                </div>
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Product</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete these Records?</p>
+                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                </div>
+                <input type="text" id="id" name="id" style="display: none">
+            </form>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                <input type="button" name="submit" class="btn btn-danger" id="btnDelete" value="Delete">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sale Modal HTML -->
+<div id="saleEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">Xác nhận mua</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p><b>Đơn hàng của bạn có giá trị là: <b th:text="${getBill}"></b> </b></p>
+                    <p><b>Đơn hàng sẽ được chuyển đến địa chỉ</b>
+                        <b id="Address"></b>
+                        <b>trong vòng 3-5 ngày</b>
+                    </p>
+                    <p><b>Cám ơn bạn đã tin tưởng và ủng hộ</b></p>
+                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                <input type="button" id="btnGetBill" class="btn btn-danger" value="Sale">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    let domain = location.origin;
+
+    //show modal delete
+    $(".delete").click(function () {
+        let ids = $(this).attr('data-id');
+        $("#id").val(ids);
+        $('#deleteEmployeeModal').modal('show');
+    });
+
+    //onclick getBill
+    $("#saleEmployeeModal").on("click", "#btnGetBill", function () {
+        let id = $("#currentRow").val();
+        $.ajax({
+            type: "Post",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: domain+"/api/sale/getBill/" + id
+        }).done(() => {
+            $("#saleEmployeeModal").modal("hide");
+            $("#tableSale tbody").remove();
+            App.getSizeCart();
+            App.showAlert("success", "Successful !!!")
+        }).fail(() => {
+            App.showAlert("danger", "Something is wrong")
+        })
+    })
+
+    $(document).ready(function () {
+        $("#btnDelete").on("click", function () {
+            let id = $("#id").val();
+            $.ajax({
+                type: "DELETE",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                url: domain+"/api/sale/delete/" + id
+            }).done((data) => {
+                $("#cart_" + data).remove();
+                $("#deleteEmployeeModal").modal("hide");
+                App.showAlert("success", "Successfull !");
+                App.getSizeCart();
+            }).fail((jqXHR) => {
+                let str = '';
+                if (jqXHR.responseJSON) {
+                    if (jqXHR.responseJSON.message) {
+                        str += `<label class="error">${jqXHR.responseJSON.message}</label>`;
+                    } else {
+                        $.each(jqXHR.responseJSON, function (key, value) {
+                            str += `<label id="${key}-error" class="error" for="${key}">${key + ": " + value}</label>`;
+                            $("#" + key).addClass("error");
+                        });
+                    }
+                }
+                $("#deleteEmployeeModal .modal-alert-danger").removeClass("hide").addClass("show");
+                $("#deleteEmployeeModal .modal-alert-danger").append(str);
+            });
+        })
+
+        //validate Frm
+        $("#saleFrm").validate({
+            onkeyup: function (element) {
+                $(element).valid()
+            },
+            onclick: false,
+            onfocusout: false,
+            rules: {
+                address: {
+                    required: true,
+                }
+            },
+            errorLabelContainer: "#saleFrm .modal-alert-danger",
+            errorPlacement: function (error, element) {
+                error.appendTo("#saleFrm .modal-alert-danger");
+            },
+            showErrors: function (errorMap, errorList) {
+                if (this.numberOfInvalids() > 0) {
+                    $("#saleFrm .modal-alert-danger").removeClass("hide").addClass("show");
+                } else {
+                    $("#saleFrm .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                    $("#saleFrm input.error").removeClass("error");
+                }
+                this.defaultShowErrors();
+            },
+            messages: {
+                address: {
+                    required: "Nhập địa chỉ",
+                }
+            }, submitHandler: function () {
+                $("#Address").text($("#addressInput").val());
+                $("#saleEmployeeModal").modal("show");
+            }
+        })
+
+        //onclick validate
+        $("#btnSale").on("click", function () {
+            $("saleFrm").submit();
+        })
+    })
+</script>
+</html>
+</html>

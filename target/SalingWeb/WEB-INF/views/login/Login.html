@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/resource/css/login.css" type="text/css">
+    <title>Loc's store</title>
+</head>
+<body>
+<header>
+
+</header>
+
+<section class="section-login">
+    <div class="col-xs-2 col-sm-3 col-md-3 col-lg-4"></div>
+    <div class="col-xs-8 col-sm-6 col-md-6 col-lg-4 form-background">
+        <h3>Login now</h3>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="row">
+                <form name="loginForm" method="POST" th:object="${account}">
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-item">
+                            <input type="text" name="username" th:field="*{username}" class="form-control"
+                                   placeholder="User Name:">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-item">
+                            <input type="password" name="password" th:field="*{password}" class="form-control"
+                                   placeholder="Password:">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 form-item">
+                            <input type="checkbox" name="rememberMe"> Remember Me!
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 form-item pw">
+                            <a th:href="@{/home/getPassword}">Forgot password ?</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-item">
+                            <h4 style="text-align:center" class="btn-danger" th:text="${mess}"></h4>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-item" style="text-align:center">
+                            <input type="submit" name="submit" class="btn-login" value="LOGIN">
+                        </div>
+                    </div>
+                    <div class="form-group user-register">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-item">
+                            <hr>
+                            Don't have an account ?
+                            <a th:href="@{/home/register}">Register an account</a>
+                        </div>
+                    </div>
+                    <div class="form-group user-register">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-item">
+                            <a th:href="@{/home}">Back home</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-2 col-sm-3 col-md-3 col-lg-4"></div>
+</section>
+</body>
+</html>

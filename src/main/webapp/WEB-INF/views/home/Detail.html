@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>JSP Page</title>
+    <th:block th:replace="/layout/Menu :: head"></th:block>
+    <link href="/resource/css/style.css" rel="stylesheet" type="text/css"/>
+    <style>
+        .gallery-wrap .img-big-wrap img {
+            height: 450px;
+            width: auto;
+            display: inline-block;
+            cursor: zoom-in;
+        }
+
+
+        .gallery-wrap .img-small-wrap .item-gallery {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #ddd;
+            margin: 7px 2px;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .gallery-wrap .img-small-wrap {
+            text-align: center;
+        }
+
+        .gallery-wrap .img-small-wrap img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: zoom-in;
+        }
+
+        .img-big-wrap img {
+            width: 100% !important;
+            height: auto !important;
+        }
+    </style>
+</head>
+
+
+<body>
+<th:block th:replace="/layout/Menu :: menu"></th:block>
+<div class="container">
+    <div class="row">
+        <th:block th:replace="/layout/Left :: left"></th:block>
+        <div class="col-sm-9">
+            <div class="container">
+                <div><h3 th:text="${prod.name}"></h3></div>
+                <div class="card">
+                    <div class="row">
+                        <aside class="col-sm-5 border-right">
+                            <article class="gallery-wrap">
+                                <div class="img-big-wrap">
+                                    <div><a href="#"><img th:src="${prod.image}">
+                                    </a></div>
+                                </div> <!-- slider-product.// -->
+                                <div class="img-small-wrap">
+                                </div> <!-- slider-nav.// -->
+                            </article> <!-- gallery-wrap .end// -->
+                        </aside>
+                        <aside class="col-sm-7">
+                            <article class="card-body p-5">
+                                <h3 class="title mb-3" th:text="${prod.title}"></h3>
+
+                                <p class="price-detail-wrap">
+                                                <span class="price h3 text-warning"> 
+                                                    <span class="currency">US $</span><span class="num"
+                                                                                            th:text="${prod.price}"></span>
+                                                </span>
+                                </p> <!-- price-detail-wrap .// -->
+                                <dl class="item-property">
+                                    <dt>Quantity: <span id="quantityProd" th:text="${prod.quantity}"></span></dt>
+                                </dl>
+                                <dl class="item-property">
+                                    <dt>Description</dt>
+                                    <dd><p th:text="${prod.description}"></p></dd>
+                                </dl>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <dl class="param param-inline">
+                                        </dl>  <!-- item-property .// -->
+                                    </div> <!-- col.// -->
+
+                                </div> <!-- row.// -->
+                                <hr>
+                                <th:block th:if="${session.login}">
+                                    <a href="#" th:unless="${session.account.isAdmin()}" th:data-id="${prod.getId()}"
+                                       th:data-quantiy="${prod.quantity}" class="btn btn-success btn-block addCard">Add
+                                        Cart</a>
+                                </th:block>
+                                <a th:href="@{/home/login}" th:unless="${session.login}"
+                                   class="btn btn-success btn-block addCard">Login to add Cart</a>
+                            </article> <!-- card-body.// -->
+                        </aside> <!-- col.// -->
+                    </div> <!-- row.// -->
+                </div> <!-- card.// -->
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="/layout/Footer :: footer"></th:block>
+<!--        <%&#45;&#45;Modal&#45;&#45;%>-->
+<div id="addCard" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="addForm">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Card ?</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-alert-danger">
+
+                </div>
+                <div class="modal-body">
+                    <input class="inputPass" id="quantity" type="number" name="quantity" placeholder="Quantity"
+                           required>
+                </div>
+                <input type="text" id="idSneaker" name="id" style="display: none">
+                <input type="text" id="quantitySneaker" th:value="${prod.quantity}" name="quantitySneaker"
+                       style="display: none">
+            </form>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                <input type="button" id="btnAddCard" name="submit" class="btn btn-danger" value="addCard">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    let domain = location.origin;
+
+    $(".addCard").click(function () {
+        let ids = $(this).attr('data-id');
+        $("#idSneaker").val(ids);
+        $('#addCard').modal('show');
+    });
+
+    $(document).ready(function () {
+        //ajax getCart
+        function pushCart() {
+            // $("#btnAddCard").on("click", function () {
+            //                     })
+            let id = $("#idSneaker").val();
+            let quantity = $("#quantity").val();
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                url: domain+"/api/sale/getCart/" + id + "?quantity=" + quantity
+            }).done((data) => {
+                // alert("SUCCESS");
+                $("#addCard").modal("hide");
+                App.showAlert("success", "Successfull !");
+                App.getSizeCart()
+            }).fail((jqXHR) => {
+                let str = '';
+                if (jqXHR.responseJSON) {
+                    if (jqXHR.responseJSON.message) {
+                        str += `<label class="error">${jqXHR.responseJSON.message}</label>`;
+                    } else {
+                        $.each(jqXHR.responseJSON, function (key, value) {
+                            str += `<label id="${key}-error" class="error" for="${key}">${key + ": " + value}</label>`;
+                            $("#" + key).addClass("error");
+                        });
+                    }
+                }
+                $("#addCard .modal-alert-danger").removeClass("hide").addClass("show");
+                $("#addCard .modal-alert-danger").append(str);
+            });
+        }
+
+        //validate
+        $("#addForm").validate({
+            onkeyup: function (element) {
+                $(element).valid()
+            },
+            onclick: false,
+            onfocusout: false,
+            rules: {
+                quantity: {
+                    required: true,
+                    min: 0,
+                    max: parseInt($("#quantitySneaker").val())
+                }
+            },
+            errorLabelContainer: "#addCard .modal-alert-danger",
+            errorPlacement: function (error, element) {
+                error.appendTo("#addCard .modal-alert-danger");
+            },
+            showErrors: function (errorMap, errorList) {
+                if (this.numberOfInvalids() > 0) {
+                    $("#addEmployeeModal .modal-alert-danger").removeClass("hide").addClass("show");
+                } else {
+                    $("#addEmployeeModal .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                    $("#frmCreateEmployee input.error").removeClass("error");
+                }
+                this.defaultShowErrors();
+            },
+            messages: {
+                quantity: {}
+            },
+            submitHandler: function () {
+                pushCart();
+            }
+        })
+
+        //resetForm
+        function resetForm() {
+            $("#addForm")[0].reset();
+            $("#addForm").validate().resetForm();
+        }
+
+        $("#addCard").on("hidden.bs.modal", function () {
+            resetForm();
+        })
+
+        $("#btnAddCard").on("click", function () {
+            // resetForm();
+            $("#addForm").submit();
+        })
+    })
+
+
+</script>
+</html>

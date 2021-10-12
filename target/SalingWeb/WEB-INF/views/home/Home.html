@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Loc's store</title>
+    <th:block th:replace="/layout/Menu :: head"></th:block>
+    <link href="/resource/css/style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<th:block th:replace="/layout/Menu :: menu"></th:block>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/home}">Category</a></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <th:block th:replace="/layout/Left :: left"></th:block>
+        <div class="col-sm-9">
+            <div class="row" id="sneaker">
+                <th:block th:each="sneaker : ${sneakers}">
+                    <div class="col-12 col-md-6 col-lg-4" id="tr_{0}">
+                        <div class="card">
+                            <img class="card-img-top" style="width:240px;height:240px;" th:src="${sneaker.getImage()}">
+                            <div class="card-body">
+                                <h4 class="card-title show_txt"><a th:href="@{/home/info/__${sneaker.getId()}__}"
+                                                                   title="View Product" th:text="${sneaker.name}"></a>
+                                </h4>
+                                <p class="card-text show_txt" th:text="${sneaker.title}"></p>
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="btn btn-danger btn-block" th:text="${sneaker.price}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<th:block th:replace="/layout/Footer :: footer"></th:block>
+</body>
+</html>
+

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Loc's store</title>
+    <th:block th:replace="/layout/Menu :: head"></th:block>
+    <link href="/resource/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="/resource/css/manager.css" rel="stylesheet" type="text/css"/>
+    <style>
+        img {
+            width: 200px;
+            height: 120px;
+        }
+    </style>
+<body>
+<th:block th:replace="/layout/Menu :: menu"></th:block>
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2>Manage <b>Product</b></h2>
+                </div>
+                <div class="col-sm-6">
+                    <a href="#addEmployeeModal" id="add-modal" data-toggle="modal" class="btn btn-success"><i
+                            class="fa fa-pencil-square-o"></i> <span>Add New Product</span></a>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped table-hover" id="tblListProducts">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="sneaker : ${sneakers}">
+                <tr th:id="'sneaker_'+${sneaker.id}" th:value="${sneaker.id}">
+                    <td th:style="${sneaker.status?'':'color: #95a5a6'}" th:text="${sneaker.id}"></td>
+                    <td th:style="${sneaker.status?'':'color: #95a5a6'}" th:text="${sneaker.name}"></td>
+                    <td>
+                        <img th:src="${sneaker.image}">
+                    </td>
+                    <td th:style="${sneaker.status?'':'color: #95a5a6'}" th:text="${sneaker.price}"></td>
+                    <td>
+                        <a th:data-id="${sneaker.id}" th:class="${sneaker.status?'edit':''}" data-toggle="modal"
+                           th:style="${sneaker.status?'':'color: #95a5a6'}">
+                            <i style="cursor: pointer" class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </a>
+                        <a th:data-id="${sneaker.id}" class="delete" data-toggle="modal"
+                           th:style="${sneaker.status?'':'color: #95a5a6'}">
+                            <i style="cursor: pointer" class="fa fa-trash-o" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <input type="hidden" id="currentRow">
+    </div>
+    <a href="/home">
+        <button type="button" class="btn btn-primary">Back to home</button>
+    </a>
+</div>
+<!-- Add Modal HTML -->
+<div id="addEmployeeModal" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Product</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-alert-danger">
+
+                </div>
+                <form id="frmCreateEmployee">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" id="name" name="name" class="form-control"
+                                       placeholder="Enter name:">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" id="title" name="title" class="form-control"
+                                       placeholder="Enter Title:">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Price</label>
+                                <input type="number" id="price" name="price" class="form-control"
+                                       placeholder="Enter price:">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Image</label>
+                                <input type="url" name="image" class="form-control"
+                                       id="image" placeholder="Enter url:">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input type="text" id="description" name="description" class="form-control"
+                                       placeholder="Enter Description:">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="category" name="category" class="form-control form-select"
+                                        aria-label="Default select example">
+                                    <th:block th:each="category : ${categories}">
+                                        <option th:value="${category.id}" th:text="${category.name}"></option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                <input type="button" id="btnCreate" name="submit" class="btn btn-success" value="Add">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal HTML -->
+<div id="editEmployeeModal" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Product</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-alert-danger">
+
+                </div>
+                <form id="frmEditEmployee">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" id="nameEdit" name="name" class="form-control"
+                                       placeholder="Enter name:">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" id="titleEdit" name="title" class="form-control"
+                                       placeholder="Enter Title:">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Price</label>
+                                <input type="number" id="priceEdit" name="price" class="form-control"
+                                       placeholder="Enter price:">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Image</label>
+                                <input type="url" name="image" class="form-control"
+                                       id="imageEdit" placeholder="Enter url:">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input type="text" id="descriptionEdit" name="description" class="form-control"
+                                       placeholder="Enter Description:">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="categoryEdit" name="category" class="form-control form-select"
+                                        aria-label="Default select example">
+                                    <option th:each="category : ${categories}" th:value="${category.id}"
+                                            th:utext="${category.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                <input type="button" id="btnEdit" name="submit" class="btn btn-success" value="Edit">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal HTML -->
+<div id="deleteEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="deleteFrm">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Product</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete these Records?</p>
+                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                </div>
+                <input type="text" id="idDelete" name="id" style="display: none">
+            </form>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                <input type="button" id="btnDelete" class="btn btn-danger" value="Delete">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    class Sneaker {
+        constructor(id, name, price, image, title, description, category) {
+            this.id = id;
+            this.name = name;
+            this.image = image;
+            this.title = title;
+            this.price = price;
+            this.description = description;
+            this.category = category;
+        }
+    }
+
+    class Category {
+        constructor(id, name) {
+            this.id = id;
+            this.name = name;
+        }
+    }
+
+    let sneaker = new Sneaker();
+    let category = new Category();
+
+    //dom show frmDelete
+    $("#tblListProducts").on("click", ".delete", function () {
+        $("#currentRow").val($(this).attr('data-id'));
+        $('#deleteEmployeeModal').modal('show');
+    });
+
+    //dom show frmEdit
+    $("#tblListProducts").on("click", ".edit", function () {
+        $("#currentRow").val($(this).attr('data-id'));
+        let id = $("#currentRow").val();
+        $.ajax({
+            type: "get",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/api/sneakers/getSneaker/" + id
+        }).done((data) => {
+            sneaker = data;
+            $("#nameEdit").val(sneaker.name);
+            $("#titleEdit").val(sneaker.title);
+            $("#priceEdit").val(sneaker.price);
+            $("#imageEdit").val(sneaker.image);
+            $("#descriptionEdit").val(sneaker.description);
+            $("#editEmployeeModal").modal("show");
+        }).fail((jgXHR) => {
+            App.showAlert("danger", "Something is Wrong !!!");
+        })
+    })
+
+    // document ready
+
+    $(document).ready(() => {
+        //data table
+        $("#tblListProducts").DataTable();
+
+        // ajax create
+        function create() {
+            sneaker.name = $("#name").val();
+            sneaker.image = $("#image").val();
+            sneaker.price = $("#price").val();
+            sneaker.title = $("#title").val();
+            sneaker.description = $("#description").val();
+            category.id = $("#category").val();
+            category.name = $("#categoryCrt option:selected").text();
+            sneaker.category = category;
+            $.ajax({
+                type: "post",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(sneaker),
+                url: "http://localhost:8080/api/sneakers"
+            }).done((data) => {
+                let sneaker = data;
+                $("#tblListProducts tbody").prepend(`
+                <tr id="sneaker_${sneaker.id}" value="${sneaker.id}">
+                    <td style="${sneaker.status ? '' : 'color: #95a5a6'}">${sneaker.id}</td>
+                    <td style="${sneaker.status ? '' : 'color: #95a5a6'}">${sneaker.name}</td>
+                    <td>
+                        <img src="${sneaker.image}">
+                    </td>
+                    <td style="${sneaker.status ? '' : 'color: #95a5a6'}">${sneaker.price}</td>
+                    <td>
+                        <a data-id="${sneaker.id}" data-name="${sneaker.name}" data-image="${sneaker.image}" data-price="${sneaker.price}" data-title="${sneaker.title}" data-description="${sneaker.description}"  th:class="${sneaker.status ? 'edit' : ''}" data-toggle="modal"
+                        style="${sneaker.status ? '' : 'color: #95a5a6'}">
+                            <i style="cursor: pointer" class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </a>
+                        <a data-id="${sneaker.id}" class="delete" data-toggle="modal"
+                            style="${sneaker.status ? '' : 'color: #95a5a6'}">
+                            <i style="cursor: pointer" class="fa fa-trash-o" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            `);
+                $("#addEmployeeModal").modal("hide");
+                App.showAlert("success", "Successfull !");
+            }).fail((jqXHR) => {
+                let str = '';
+
+                if (jqXHR.responseJSON) {
+                    if (jqXHR.responseJSON.message) {
+                        str += `<label class="error">${jqXHR.responseJSON.message}</label>`;
+                    } else {
+                        $.each(jqXHR.responseJSON, function (key, value) {
+                            str += `<label id="${key}-error" class="error" for="${key}">${key + ": " + value}</label>`;
+                            $("#" + key).addClass("error");
+                        });
+                    }
+                }
+                $("#addEmployeeModal .modal-alert-danger").removeClass("hide").addClass("show");
+                $("#addEmployeeModal .modal-alert-danger").append(str);
+            });
+        }
+
+        //validate frmCreate
+        $("#frmCreateEmployee").validate({
+            onkeyup: function (element) {
+                $(element).valid()
+            },
+            onclick: false,
+            onfocusout: false,
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 50
+                }, title: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 50
+                }, price: {
+                    required: true,
+                    min: 0
+                }, image: {
+                    required: true
+                }, description: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 1000
+                },
+            },
+            errorLabelContainer: "#addEmployeeModal .modal-alert-danger",
+            errorPlacement: function (error, element) {
+                error.appendTo("#addEmployeeModal .modal-alert-danger");
+            },
+            showErrors: function (errorMap, errorList) {
+                if (this.numberOfInvalids() > 0) {
+                    $("#addEmployeeModal .modal-alert-danger").removeClass("hide").addClass("show");
+                } else {
+                    $("#addEmployeeModal .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                    $("#frmCreateEmployee input.error").removeClass("error");
+                }
+                this.defaultShowErrors();
+            },
+            messages: {
+                name: {
+                    required: "Vui lòng nhập đầy đủ tên sản phẩm",
+                    minlength: jQuery.validator.format("Họ tên tối thiểu {0} ký tự"),
+                    maxlength: jQuery.validator.format("Họ tên tối đa {0} ký tự")
+                }, title: {
+                    required: "Vui lòng nhập đầy đủ tile",
+                    minlength: jQuery.validator.format("Title tối thiểu {0} ký tự"),
+                    maxlength: jQuery.validator.format("Title tối đa {0} ký tự")
+                }, price: {
+                    required: "Vui lòng nhập đầy đủ giá",
+                    min: "Gía lớn hơn 0"
+                }, image: {
+                    required: "Vui lòng nhập đầy đủ link ảnh"
+                }, description: {
+                    required: "Vui lòng nhập đầy đủ mô tả",
+                    minlength: jQuery.validator.format("Mô tả tối thiểu {0} ký tự"),
+                    maxlength: jQuery.validator.format("Mô tả tối đa {0} ký tự")
+                }
+            },
+            submitHandler: function () {
+                create()
+            }
+        });
+        //reset modal create
+        $("#addEmployeeModal").on("hidden.bs.modal", function () {
+            $("#frmCreateEmployee")[0].reset();
+            $("#frmCreateEmployee").validate().resetForm();
+        });
+
+        //ajax edit
+        function Edit() {
+            sneaker.id = $("#currentRow").val();
+            sneaker.name = $("#nameEdit").val();
+            sneaker.image = $("#imageEdit").val();
+            sneaker.price = $("#priceEdit").val();
+            sneaker.title = $("#titleEdit").val();
+            sneaker.description = $("#descriptionEdit").val();
+            category.id = $("#categoryEdit").val();
+            category.name = $("#categoryCrt option:selected").text();
+            sneaker.category = category;
+            $.ajax({
+                type: "post",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(sneaker),
+                url: "http://localhost:8080/api/sneakers/edit"
+            }).done((data) => {
+                let sneaker = data;
+                let row = $("#sneaker_" + sneaker.id)
+                row.replaceWith(`
+                <tr id="sneaker_${sneaker.id}" value="${sneaker.id}">
+                    <td style="${sneaker.status ? '' : 'color: #95a5a6'}">${sneaker.id}</td>
+                    <td style="${sneaker.status ? '' : 'color: #95a5a6'}">${sneaker.name}</td>
+                    <td>
+                        <img src="${sneaker.image}">
+                    </td>
+                    <td style="${sneaker.status ? '' : 'color: #95a5a6'}">${sneaker.price}</td>
+                    <td>
+                        <a data-id="${sneaker.id}" data-name="${sneaker.name}" data-image="${sneaker.image}" data-price="${sneaker.price}" data-title="${sneaker.title}" data-description="${sneaker.description}"  th:class="${sneaker.status ? 'edit' : ''}" data-toggle="modal"
+                        style="${sneaker.status ? '' : 'color: #95a5a6'}">
+                            <i style="cursor: pointer" class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </a>
+                        <a data-id="${sneaker.id}" class="delete" data-toggle="modal"
+                            style="${sneaker.status ? '' : 'color: #95a5a6'}">
+                            <i style="cursor: pointer" class="fa fa-trash-o" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            `);
+                $("#editEmployeeModal").modal("hide");
+                App.showAlert("success", "Successfull !");
+            }).fail((jqXHR) => {
+                let str = '';
+
+                if (jqXHR.responseJSON) {
+                    if (jqXHR.responseJSON.message) {
+                        str += `<label class="error">${jqXHR.responseJSON.message}</label>`;
+                    } else {
+                        $.each(jqXHR.responseJSON, function (key, value) {
+                            str += `<label id="${key}-error" class="error" for="${key}">${key + ": " + value}</label>`;
+                            $("#" + key).addClass("error");
+                        });
+                    }
+                }
+                $("#editEmployeeModal .modal-alert-danger").removeClass("hide").addClass("show");
+                $("#editEmployeeModal .modal-alert-danger").append(str);
+            });
+        }
+
+        //validate frmEdit
+        $("#frmEditEmployee").validate({
+            onkeyup: function (element) {
+                $(element).valid()
+            },
+            onclick: false,
+            onfocusout: false,
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 50
+                }, title: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 50
+                }, price: {
+                    required: true,
+                    min: 0
+                }, image: {
+                    required: true
+                }, description: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 1000
+                },
+            },
+            errorLabelContainer: "#addEmployeeModal .modal-alert-danger",
+            errorPlacement: function (error, element) {
+                error.appendTo("#addEmployeeModal .modal-alert-danger");
+            },
+            showErrors: function (errorMap, errorList) {
+                if (this.numberOfInvalids() > 0) {
+                    $("#editEmployeeModal .modal-alert-danger").removeClass("hide").addClass("show");
+                } else {
+                    $("#editEmployeeModal .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                    $("#frmEditEmployee input.error").removeClass("error");
+                }
+                this.defaultShowErrors();
+            },
+            messages: {
+                name: {
+                    required: "Vui lòng nhập đầy đủ tên sản phẩm",
+                    minlength: jQuery.validator.format("Họ tên tối thiểu {0} ký tự"),
+                    maxlength: jQuery.validator.format("Họ tên tối đa {0} ký tự")
+                }, title: {
+                    required: "Vui lòng nhập đầy đủ tile",
+                    minlength: jQuery.validator.format("Title tối thiểu {0} ký tự"),
+                    maxlength: jQuery.validator.format("Title tối đa {0} ký tự")
+                }, price: {
+                    required: "Vui lòng nhập đầy đủ giá",
+                    min: "Gía lớn hơn 0"
+                }, image: {
+                    required: "Vui lòng nhập đầy đủ link ảnh"
+                }, description: {
+                    required: "Vui lòng nhập đầy đủ mô tả",
+                    minlength: jQuery.validator.format("Mô tả tối thiểu {0} ký tự"),
+                    maxlength: jQuery.validator.format("Mô tả tối đa {0} ký tự")
+                }
+            },
+            submitHandler: function () {
+                Edit()
+            }
+        });
+        //reset modal Edit
+        $("#editEmployeeModal").on("hidden.bs.modal", function () {
+            $("#frmEditEmployee")[0].reset();
+            $("#frmEditEmployee").validate().resetForm();
+        });
+
+        //ajax delete Product
+
+        $("#btnDelete").on("click", function () {
+            let id = $("#currentRow").val();
+            $.ajax({
+                type: "post",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                url: "http://localhost:8080/api/sneakers/delete/" + id
+            }).done((data) => {
+                let sneaker = data;
+                let row = $("#sneaker_" + sneaker.id)
+                row.remove();
+                $("#deleteEmployeeModal").modal("hide");
+                App.showAlert("success", "Successfull !");
+            }).fail((jqXHR) => {
+                $("#deleteEmployeeModal").modal("hide");
+                App.showAlert("danger", "Something is Wrong")
+            });
+        })
+
+
+    });
+    //catch dom validate frmCreate
+    $("#btnCreate").on("click", function () {
+        $("#frmCreateEmployee").submit();
+    });
+
+    //catch dom validate frmEdit
+    $("#btnEdit").on("click", function () {
+        $("#frmEditEmployee").submit();
+    });
+</script>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Loc's store</title>
+    <th:block th:fragment="head">
+        <link rel="stylesheet" href="/resource/css/modal-validate.css">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <script src="/resource/js/jquery.min.js"></script>
+        <script src="/resource/js/jquery.validate-1.19.3.min.js"></script>
+        <link href="/resource/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/resource/css/sweetalert2.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/resource/css/datatable.min.css">
+        <script src="/resource/js/bootstrap.min.js"></script>
+        <script src="/resource/js/bootstrap.bundle.min.js"></script>
+        <script src="/resource/js/sweetalert2.min.js"></script>
+        <script src="/resource/js/datatable.min.js"></script>
+        <script src="/resource/js/script.js"></script>
+    </th:block>
+    <!--begin of menu-->
+    <th:block th:fragment="menu">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" th:href="@{/home}">Loc's store</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                        aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-end" id="navbarsExampleDefault">
+                    <ul class="navbar-nav m-auto">
+                        <th:block th:if="${session.login}">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/home/infoAccount/__${session.account.getId()}__}"
+                                   th:text="${session.account.name}"></a>
+                            </li>
+                            <li class="nav-item" th:if="${session.account.isUser()}">
+                                <a class="nav-link" th:href="@{/home/managerAccount}">Manager Account</a>
+                            </li>
+                            <li class="nav-item" th:if="${session.account.isAdmin()}">
+                                <a class="nav-link" th:href="@{/home/managerProduct}">Manager Product</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/home/logout}">Log-out</a>
+                            </li>
+                        </th:block>
+                        <th:block th:unless="${session.login}">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/home/login}">Log-in</a>
+                            </li>
+                        </th:block>
+                    </ul>
+
+                    <form th:action="@{/home/search}" method="post" class="form-inline my-2 my-lg-0">
+                        <div class="input-group input-group-sm">
+                            <input name="keyword" th:value="${keyword}" type="text" class="form-control"
+                                   aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                                   placeholder="Search by name:">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-secondary btn-number">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <th:block th:if="${session.login}">
+                            <a class="btn btn-success btn-sm ml-3" th:unless="${session.account.isAdmin()}"
+                               th:href="@{/sale/cartUser/__${session.account.getId()}__}">
+                                <i class="fa fa-shopping-cart"></i>
+                                <!--                        <span class="badge badge-danger" th:text="${session.size}"></span>-->
+                                <span class="badge badge-danger" id="sizeCart"></span>
+                            </a>
+                            <a class="btn btn-success btn-sm ml-3" th:if="${session.account.isAdmin()}"
+                               th:href="@{/sale/cartAdmin}">
+                                <i class="fa fa-shopping-cart"></i>
+                            </a>
+                        </th:block>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="jumbotron-heading">Chào mừng đến với Loc's store</h1>
+                <p class="lead text-muted mb-0">Giúp khách hàng tuyệt vời hơn dưới mọi ánh nhìn</p>
+            </div>
+        </section>
+        <script>
+            $(document).ready(function () {
+                App.getSizeCart()
+            })
+        </script>
+    </th:block>
+    <!--end of menu-->
