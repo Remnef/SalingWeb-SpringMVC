@@ -215,6 +215,8 @@
 </body>
 <script>
 
+    let domain = location.origin;
+
     class Account {
         constructor(username, password, isUser, name, email) {
             this.username = username;
@@ -260,7 +262,7 @@
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                url: "http://localhost:8080/api/account/?repassword=" + repassword,
+                url: domain+"/api/account/?repassword=" + repassword,
                 data: JSON.stringify(account)
             }).done((data) => {
                 // alert("SUCCESS");
@@ -388,7 +390,7 @@
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                url: "http://localhost:8080/api/account/setLock/" + id,
+                url: domain+"/api/account/setLock/" + id,
                 data: JSON.stringify(account)
             }).done((data) => {
                 account = data
@@ -448,7 +450,7 @@
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                url: "http://localhost:8080/api/account/setMod/" + id,
+                url: domain+"/api/account/setMod/" + id,
                 data: JSON.stringify(account)
             }).done((data) => {
                 account = data

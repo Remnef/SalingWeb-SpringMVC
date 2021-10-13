@@ -136,6 +136,8 @@
 </div>
 </body>
 <script>
+    let domain = location.origin;
+
     $(".addCard").click(function () {
         let ids = $(this).attr('data-id');
         $("#idSneaker").val(ids);
@@ -155,7 +157,7 @@
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                url: "http://localhost:8080/api/sale/getCart/" + id + "?quantity=" + quantity
+                url: domain+"/api/sale/getCart/" + id + "?quantity=" + quantity
             }).done((data) => {
                 // alert("SUCCESS");
                 $("#addCard").modal("hide");

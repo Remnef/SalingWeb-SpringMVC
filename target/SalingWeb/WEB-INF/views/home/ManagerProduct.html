@@ -281,7 +281,7 @@
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            url: "http://localhost:8080/api/sneakers/getSneaker/" + id
+            url: domain+"/api/sneakers/getSneaker/" + id
         }).done((data) => {
             sneaker = data;
             $("#nameEdit").val(sneaker.name);
@@ -298,6 +298,9 @@
     // document ready
 
     $(document).ready(() => {
+
+        let domain = location.origin;
+
         //data table
         $("#tblListProducts").DataTable();
 
@@ -318,7 +321,7 @@
                     'Content-Type': 'application/json'
                 },
                 data: JSON.stringify(sneaker),
-                url: "http://localhost:8080/api/sneakers"
+                url: domain+"/api/sneakers"
             }).done((data) => {
                 let sneaker = data;
                 $("#tblListProducts tbody").prepend(`
@@ -449,7 +452,7 @@
                     'Content-Type': 'application/json'
                 },
                 data: JSON.stringify(sneaker),
-                url: "http://localhost:8080/api/sneakers/edit"
+                url: domain+"/api/sneakers/edit"
             }).done((data) => {
                 let sneaker = data;
                 let row = $("#sneaker_" + sneaker.id)
@@ -573,7 +576,7 @@
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                url: "http://localhost:8080/api/sneakers/delete/" + id
+                url: domain+"/api/sneakers/delete/" + id
             }).done((data) => {
                 let sneaker = data;
                 let row = $("#sneaker_" + sneaker.id)

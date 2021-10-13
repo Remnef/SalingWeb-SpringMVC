@@ -123,6 +123,8 @@
 <th:block th:replace="/layout/Footer :: footer"></th:block>
 </body>
 <script>
+    let domain = location.origin;
+
     // show frm
     $(".changePass").click(function () {
         let ids = $(this).attr('data-id');
@@ -143,7 +145,7 @@
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            url: "http://localhost:8080/api/account/password/"
+            url: domain+"/api/account/password/"
             , data: JSON.stringify(passwordDTO)
 
         }).done((data) => {
